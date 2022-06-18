@@ -1,0 +1,9 @@
+code/*
+.env
+
+**/.terraform/*
+**/.terragrunt-cache/*
+*.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*out.terraform*
