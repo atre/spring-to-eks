@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-petclinic-eks
+spec:
+  selector:
+    matchLabels:
+      app: spring-petclinic-eks
+  template:
+    metadata:
+      labels:
+        app: spring-petclinic-eks
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 5
+      containers:
+      - name: server
+        image: petclinic
+        env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: database
+                key: username
+                optional: false
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: database
+                key: password
+                optional: false
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: database
+                key: host
+                optional: false
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-petclinic-eks
+spec:
+  type: LoadBalancer
+  selector:
+    app: spring-petclinic-eks
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8080

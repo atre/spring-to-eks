@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+metadata:
+  name: spring-petclinic-eks
+build:
+  local:
+    push: true
+  artifacts:
+  - image: petclinic
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes/petclinic.yaml
